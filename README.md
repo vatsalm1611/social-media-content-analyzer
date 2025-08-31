@@ -1,98 +1,92 @@
-# Create a plain text README file with the provided content
-content = """Social Media Content Analyzer (React + Node)
+📊 Social Media Content Analyzer
 
-Extract text from PDFs/images (PDF parsing + OCR) and get quick, actionable engagement suggestions for your social posts.
-
-Build: https://img.shields.io/badge/build-passing-brightgreen
-Stack: https://img.shields.io/badge/stack-React%20%7C%20Vite%20%7C%20Node%20%7C%20Express-blue
-License: https://img.shields.io/badge/license-MIT-lightgrey
+A modern tool to extract text from PDFs & images using OCR and provide quick, actionable engagement insights for social media posts.  
+Built with React + Vite (frontend) and Node.js + Express (backend), powered by pdf-parse, Tesseract.js, and Sharp.
 
 ---
 
-Overview
-
-Client: React + Vite
-Server: Node.js (Express) with pdf-parse, tesseract.js, sharp, multer
-
-What it does
-- Upload a PDF or image
-- Extract text (direct for PDFs, OCR for images)
-- Get simple engagement insights: word count, hashtags, mentions, links, and numbered suggestions
-
----
-
-Features
-
-1. Drag & drop / file browse uploads
-2. PDF text extraction (via pdf-parse)
-3. Image OCR (via tesseract.js, preprocessed with sharp)
-4. Robust loading/error states
-5. Copy or download extracted text as .txt
-6. Lightweight analyzer (no ML): word count, hashtags, mentions, links, numbered suggestions
+## ✨ Features
+- 📂 File Uploads: Drag & drop or browse PDFs and images  
+- 🔎 Smart Text Extraction:  
+  - PDFs → direct text parsing  
+  - Images → OCR (with Sharp preprocessing)  
+- 📊 Engagement Insights:  
+  - Word count & reading time  
+  - Hashtags, mentions, links  
+  - Top keywords  
+  - Actionable improvement suggestions  
+- ⚡ Robust UX: Handles large files (up to 20 MB) with clear error messages  
+- 📥 Export Options: Copy or download extracted text  
 
 ---
 
-Project Structure
+## 🚀 Getting Started
 
-root/
-├─ client/                # React + Vite app
-│  ├─ src/
-│  │  ├─ components/
-│  │  │  └─ Result.jsx   # Shows meta, text, suggestions (numbered)
-│  │  ├─ styles.css      # UI styles
-│  │  └─ main.jsx
-│  └─ index.html
-└─ server/                # Express API
-   ├─ index.js            # /api/extract, /api/health
-   └─ package.json
+### Run Locally
+1. Clone the repository:
+   git clone https://github.com/vatsalm1611/social-media-content-analyzer.git
+   cd social-media-content-analyzer
 
----
+2. Start the backend:
+   cd server
+   npm install
+   npm run dev   # http://localhost:8080
 
-Requirements
-
-- Node.js 18+ (LTS recommended)
-- npm 9+ or pnpm/yarn
-- For OCR: native libs used by sharp/tesseract.js are downloaded automatically
+3. Start the frontend:
+   cd client
+   npm install
+   npm run dev   # http://localhost:5173
 
 ---
 
-Configuration
+## ☁️ Deployment (Render)
 
-Server (server/.env)
-PORT=8080  # Optional. Defaults to 8080 if unset.
+This project runs as a single web service on Render.  
 
-Client (client/.env)
-VITE_API_BASE=http://localhost:8080  # Base URL for the server API (no trailing slash)
+- Build Command  
+  npm ci --prefix client && npm run build --prefix client && npm ci --prefix server
 
----
+- Start Command  
+  npm start --prefix server
 
-Local Development
+- Health Check Path → /api/health  
 
-# 1) Server
-cd server
-npm install
-npm run dev    # starts http://localhost:8080
-
-# 2) Client (in a new terminal)
-cd client
-npm install
-npm run dev    # Vite dev server, defaults to http://localhost:5173
-
-Open http://localhost:5173.
-The client reads VITE_API_BASE to call the server.
+🔗 Live Demo: (add your Render link here once deployed)
 
 ---
 
-API
+## 🛠 Tech Stack
+- Frontend: React, Vite, Tailwind CSS  
+- Backend: Node.js, Express  
+- Libraries: pdf-parse, Tesseract.js, Sharp, Multer  
+- Deployment: Render (single service)  
 
-GET /api/health
-Health probe for uptime checks.
-Response:
-{ "ok": true, "status": "healthy" }
+---
 
-POST /api/extract (multipart/form-data)
-Fields:
-- file — uploaded file (PDF or image)
+## 📂 Project Structure
+social-media-content-analyzer/
+├── client/           # React + Vite frontend
+│   └── src/
+│       ├── components/
+│       │   ├── FileUpload.jsx
+│       │   └── Result.jsx
+│       ├── styles.css
+│       └── main.jsx
+└── server/           # Express backend
+    ├── index.js      # API routes (/api/extract, /api/health)
+    └── package.json
+
+---
+
+## 🔗 API Endpoints
+
+### Health Check
+GET /api/health  
+→ { "ok": true, "status": "healthy" }
+
+### Extract Text
+POST /api/extract  
+FormData: file=<pdf/image>
 
 Response:
 {
@@ -101,115 +95,40 @@ Response:
   "text": "Extracted text here...",
   "analysis": {
     "wordCount": 123,
-    "readingTime": 1,
     "hashtags": 2,
     "mentions": 1,
     "urls": 0,
     "suggestions": [
       "Ask a question to spark replies.",
-      "Add a clear call-to-action or helpful link.",
-      "... (up to 5)"
+      "Add a clear call-to-action..."
     ],
     "topKeywords": [
-      { "word": "launch", "count": 3 },
-      { "word": "feature", "count": 2 }
+      { "word": "launch", "count": 3 }
     ]
   }
 }
 
-cURL:
-curl -X POST -F "file=@/path/to/your/file.png" http://localhost:8080/api/extract
+---
+
+## 🐛 Troubleshooting
+- 415 Unsupported Media Type → Only PDFs & images are allowed  
+- 400 File Too Large → Max size = 20 MB  
+- OCR Slow on First Run → Tesseract downloads trained data once  
+- CORS Errors → Ensure VITE_API_BASE matches backend URL  
 
 ---
 
-Supported Files & Limits
-
-- Types: application/pdf, image/png, image/jpeg, image/jpg, image/webp
-- Max size: 20 MB
-- For very tall screenshots, the server applies a smart center-crop before OCR to reduce header/footer noise.
-
----
-
-Deployment
-
-Server (Render/Railway/Fly/etc.)
-- Command: npm start
-- Port: use platform default or set PORT
-- CORS: server already enables permissive CORS for GET, POST, OPTIONS
-
-Render (example)
-- Build Command: npm install
-- Start Command: npm start
-
-Client (Vercel/Netlify)
-- Build: vite build → outputs to dist/
-- Set VITE_API_BASE to your deployed server URL
-- Add a rewrite/proxy for /api/* → server URL (optional but recommended)
-
-Vercel (vercel.json)
-{
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://<your-server-domain>/$1" }
-  ]
-}
-
-Netlify (netlify.toml)
-[[redirects]]
-  from = "/api/*"
-  to = "https://<your-server-domain>/:splat"
-  status = 200
+## 📈 Roadmap
+- Multi-language OCR support  
+- OCR on scanned PDFs  
+- Export results as Markdown  
+- Rate limiting & logging for production  
 
 ---
 
-Quality, Security & Ops Notes
-
-- No secrets in client: there are no API keys in the client code.
-- Rate limiting: If exposing publicly, add a reverse-proxy or Express middleware (e.g., express-rate-limit).
-- File validation: The server enforces MIME and size limits via multer.
-- Error handling: Clear 400/415/500 responses; client shows user-friendly messages.
-- Logging: Minimal console logs; integrate with a logger (e.g., pino/winston) for production.
-- Health checks: Use /api/health for platform liveness probes.
+## 📜 License
+MIT © Vatsal Mishra  
 
 ---
 
-Performance Tips
-
-- OCR speed: OCR is CPU-bound. Prefer smaller, cropped images for faster results.
-- Tesseract cache: First run downloads eng data; subsequent runs are faster.
-- PDFs vs Images: Native text PDFs are much faster than scanned PDFs.
-- Horizontal scaling: Stateless; can be scaled behind a load balancer. Pin CPU-heavy OCR behind a queue if needed.
-
----
-
-Troubleshooting
-
-- 415 Unsupported Media Type
-  Only PDFs and images are allowed. Check the file’s MIME type and extension.
-
-- 400 File too large
-  Files over 20 MB are rejected. Compress or downscale.
-
-- Tesseract slow on first run
-  It downloads eng traineddata the first time. Warm up by OCR’ing a tiny image during deploy.
-
-- CORS errors in browser
-  Ensure VITE_API_BASE points to the correct server URL and the server is reachable. Rewrites help avoid mixed-origin issues.
-
----
-
-Roadmap (Optional)
-- OCR on scanned PDFs (per-page rasterization before OCR)
-- Language selection for OCR (multi-lang support)
-- Export to .md with basic formatting
-
----
-
-License
-MIT © Your Name
-"""
-
-path = "/mnt/data/README_Social_Media_Content_Analyzer.txt"
-with open(path, "w", encoding="utf-8") as f:
-    f.write(content)
-
-path
+⚡ Built with ❤ using modern web technologies ⚡
