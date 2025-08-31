@@ -1,5 +1,5 @@
-
 require('dotenv/config');
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -181,12 +181,22 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
   }
 });
 
-/** Fallback 404 */
+/** --- Serve React build (Vite: client/dist) --- */
+const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientBuildPath));
+
+/** SPA fallback: non-API routes -> index.html */
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  return res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+
+/** Fallback 404 (API ke liye) */
 app.use((_req, res) => {
   res.status(404).json({ ok: false, error: 'Route not found' });
 });
 
 /** Boot */
-app.listen(SERVER_PORT, () => {
-  console.log(`Server listening on http://localhost:${SERVER_PORT}`);
+app.listen(SERVER_PORT, '0.0.0.0', () => {
+  console.log(`Server listening on port ${SERVER_PORT}`);
 });
