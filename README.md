@@ -61,7 +61,7 @@ This project runs as a single web service on Render.
 
 - **Health Check Path** → `/api/health`  
 
-🔗 Live Demo: *(add your Render link here once deployed)*
+🔗 Live Demo: *https://social-media-content-analyzer-3vyn.onrender.com/*
 
 ---
 
