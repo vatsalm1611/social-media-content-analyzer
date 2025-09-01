@@ -1,4 +1,4 @@
-📊 Social Media Content Analyzer
+# 📊 Social Media Content Analyzer
 
 A modern tool to extract text from PDFs & images using OCR and provide quick, actionable engagement insights for social media posts.  
 Built with React + Vite (frontend) and Node.js + Express (backend), powered by pdf-parse, Tesseract.js, and Sharp.
@@ -24,18 +24,24 @@ Built with React + Vite (frontend) and Node.js + Express (backend), powered by p
 
 ### Run Locally
 1. Clone the repository:
+   ```bash
    git clone https://github.com/vatsalm1611/social-media-content-analyzer.git
    cd social-media-content-analyzer
+   ```
 
 2. Start the backend:
+   ```bash
    cd server
    npm install
    npm run dev   # http://localhost:8080
+   ```
 
 3. Start the frontend:
+   ```bash
    cd client
    npm install
    npm run dev   # http://localhost:5173
+   ```
 
 ---
 
@@ -43,15 +49,19 @@ Built with React + Vite (frontend) and Node.js + Express (backend), powered by p
 
 This project runs as a single web service on Render.  
 
-- Build Command  
+- **Build Command**
+  ```bash
   npm ci --prefix client && npm run build --prefix client && npm ci --prefix server
+  ```
 
-- Start Command  
+- **Start Command**
+  ```bash
   npm start --prefix server
+  ```
 
-- Health Check Path → /api/health  
+- **Health Check Path** → `/api/health`  
 
-🔗 Live Demo: (add your Render link here once deployed)
+🔗 Live Demo: *(add your Render link here once deployed)*
 
 ---
 
@@ -64,6 +74,7 @@ This project runs as a single web service on Render.
 ---
 
 ## 📂 Project Structure
+```
 social-media-content-analyzer/
 ├── client/           # React + Vite frontend
 │   └── src/
@@ -75,20 +86,26 @@ social-media-content-analyzer/
 └── server/           # Express backend
     ├── index.js      # API routes (/api/extract, /api/health)
     └── package.json
+```
 
 ---
 
 ## 🔗 API Endpoints
 
 ### Health Check
-GET /api/health  
+```http
+GET /api/health
 → { "ok": true, "status": "healthy" }
+```
 
 ### Extract Text
-POST /api/extract  
+```http
+POST /api/extract
 FormData: file=<pdf/image>
+```
 
-Response:
+**Response**
+```json
 {
   "ok": true,
   "file": { "name": "example.pdf", "type": "application/pdf" },
@@ -107,14 +124,15 @@ Response:
     ]
   }
 }
+```
 
 ---
 
 ## 🐛 Troubleshooting
-- 415 Unsupported Media Type → Only PDFs & images are allowed  
-- 400 File Too Large → Max size = 20 MB  
-- OCR Slow on First Run → Tesseract downloads trained data once  
-- CORS Errors → Ensure VITE_API_BASE matches backend URL  
+- **415 Unsupported Media Type** → Only PDFs & images are allowed  
+- **400 File Too Large** → Max size = 20 MB  
+- **OCR Slow on First Run** → Tesseract downloads trained data once  
+- **CORS Errors** → Ensure `VITE_API_BASE` matches backend URL  
 
 ---
 
